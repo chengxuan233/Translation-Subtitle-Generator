@@ -1,7 +1,7 @@
 import openai
 import whisper
 
-openai.api_key = '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'
+openai.api_key = ' your api key'
 
 
 def translate_text(input_text, source_language, target_language):
