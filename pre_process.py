@@ -1,6 +1,7 @@
 import openai
+import whisper
 
-openai.api_key = 'your own api key'
+openai.api_key = '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'
 
 
 def translate_text(input_text, source_language, target_language):
@@ -19,10 +20,32 @@ def translate_text(input_text, source_language, target_language):
     return translated_text
 
 
-# Example usage
+def translate_transcript(source_language, target_language):
+    with open("transcription.txt", "r") as f:
+        lines = f.readlines()
+
+    translated_transcript = []
+
+    for line in lines:
+        # Split each line into timestamp and text parts
+        parts = line.strip().split(': ')
+        if len(parts) == 2:
+            timestamp, text = parts[0], parts[1]
+            # Translate only the text part
+            translated_text = translate_text(text, source_language, target_language)
+            # Reconstruct the line with the translated text and the preserved timestamp
+            translated_line = f"{timestamp}: {translated_text}"
+            translated_transcript.append(translated_line)
+        else:
+            # If the line doesn't contain a timestamp, add it as is
+            translated_transcript.append(line.strip())
+
+    return '\n'.join(translated_transcript)
+
+
 source_lang = "English"
 target_lang = "Chinese"
-text_to_translate = "one two three "
 
-translated_result = translate_text(text_to_translate, source_lang, target_lang)
+# Translate the entire transcript while preserving timestamps
+translated_result = translate_transcript(source_lang, target_lang)
 print(translated_result)
